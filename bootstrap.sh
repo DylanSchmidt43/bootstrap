@@ -40,6 +40,7 @@ echo "=== Requesting install authorization (this reserves 1 point) ==="
 
 START_RESPONSE=$(
     curl \
+        --ipv4 \
         --silent \
         --show-error \
         --connect-timeout 10 \
