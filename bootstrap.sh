@@ -79,6 +79,8 @@ print(value)
 }
 
 AES_PASSPHRASE=$(extract_json_field "aes_passphrase" "$START_RESPONSE")
+# Signed link to the image on the bot's image server; empty when not set up.
+IMAGE_URL=$(extract_json_field "image_url" "$START_RESPONSE" || true)
 if [ -z "$AES_PASSPHRASE" ]; then
     STATUS_MSG=$(extract_json_field "message" "$START_RESPONSE")
     echo "FATAL: install not authorized: ${STATUS_MSG:-no passphrase returned}. No point was charged; nothing on this machine was touched." >&2
@@ -127,7 +129,7 @@ fi
 echo "=== Starting Windows install ==="
 chmod +x "$WORKDIR/installVPSWindows.sh"
 cd "$WORKDIR"
-bash installVPSWindows.sh "$WIN_VERSION" "$REQUEST_TOKEN"
+WINDOWS_IMAGE_DIRECT_URL="$IMAGE_URL" bash installVPSWindows.sh "$WIN_VERSION" "$REQUEST_TOKEN"
 INSTALL_EXIT=$?
 
 exit "$INSTALL_EXIT"
